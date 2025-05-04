@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chúc Mừng Sinh Nhật!</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #000000;
+            overflow-x: hidden;
+        }
+
+        .background-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -2;
+            background-image:
+                linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+                url('Images/2.gif');
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-attachment: fixed;
+            background-size: 30% auto;
+        }
+
+        .container {
+            text-align: center;
+            padding: 100px 20px;
+            display: none;
+        }
+
+        h1 {
+            font-family: 'Pacifico', cursive;
+            font-size: 60px;
+            color: #ffd700;
+            animation: bounce 2s infinite;
+        }
+
+        p {
+            font-size: 26px;
+            color: #ffffff;
+            margin-top: 20px;
+            animation: fadeIn 3s ease forwards;
+        }
+
+        img.main-img {
+            max-width: 50%;
+            height: auto;
+            margin-top: 30px;
+            animation: candleGlow 2s infinite alternate;
+        }
+
+        @keyframes candleGlow {
+            0% { filter: drop-shadow(0 0 5px #ffcc00); }
+            100% { filter: drop-shadow(0 0 20px #ff9900); }
+        }
+
+        .confetti {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            top: 0;
+            left: 0;
+            z-index: 0;
+        }
+
+        .confetti span {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #fff;
+            animation: fall linear infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        #countdown {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 100px;
+            color: #ffd700;
+            background-color: rgba(0,0,0,0.8);
+            padding: 20px 40px;
+            border-radius: 20px;
+            z-index: 1000;
+        }
+
+        #showMessageBtn {
+            display: block;
+            margin: 40px auto 0;
+            font-size: 20px;
+            padding: 10px 20px;
+            background-color: #ff4081;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        #messageBox {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1c1c1c;
+            border-radius: 15px 15px 0 0;
+            padding: 20px;
+            box-shadow: 0 -4px 8px rgba(255,255,255,0.2);
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        #messageBox img {
+            max-width: 250px;
+            border-radius: 15px;
+        }
+
+        #messageText {
+            font-size: 20px;
+            color: #f5f5f5;
+            max-width: 400px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="background-layer"></div>
+    <div id="countdown">3</div>
+    <div class="confetti"></div>
+    <div class="container" id="mainContent">
+        <h1>🎉 Chúc Mừng Sinh Nhật! 🎂</h1>
+        <p>Chúc bạn có một ngày sinh nhật thật tuyệt vời, luôn vui vẻ, thành công và được yêu thương! 💖</p>
+        <button id="showMessageBtn">Bấm để nhận thư 🎁</button>
+        <div id="messageBox" style="display: none;">
+            <img src="Images/3.jpg" alt="Birthday Gift">
+            <div id="messageText">
+                Gửi đến bạn những lời chúc tốt đẹp nhất! Mong rằng tuổi mới sẽ mang đến nhiều may mắn, sức khỏe và niềm vui 💌
+            </div>
+        </div>
+    </div>
+
+    <audio id="birthdayAudio" src="music/birthday.mp3"></audio>
+
+    <script>
+        const countdown = document.getElementById('countdown');
+        const audio = document.getElementById('birthdayAudio');
+        const mainContent = document.getElementById('mainContent');
+        const showMessageBtn = document.getElementById('showMessageBtn');
+        const messageBox = document.getElementById('messageBox');
+
+        let counter = 3;
+        countdown.textContent = counter;
+
+        const timer = setInterval(() => {
+            counter--;
+            if (counter === 0) {
+                clearInterval(timer);
+                countdown.style.display = 'none';
+                setTimeout(() => {
+                    mainContent.style.display = 'block';
+                    audio.play();
+                }, 2000);
+            } else {
+                countdown.textContent = counter;
+            }
+        }, 1000);
+
+        showMessageBtn.addEventListener('click', () => {
+            messageBox.style.display = 'flex';
+        });
+
+        const confettiContainer = document.querySelector('.confetti');
+        for (let i = 0; i < 100; i++) {
+            const confetti = document.createElement('span');
+            confetti.style.left = Math.random() * 100 + 'vw';
+            confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 70%, 60%)`;
+            confettiContainer.appendChild(confetti);
+        }
+    </script>
+</body>
+</html>
